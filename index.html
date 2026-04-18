@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transforme sua mente, crie disciplina e mude sua vida em 30 dias com o Protocolo Elite. Sistema gamificado PWA com 5 missões diárias, e-books mensais, grupo VIP e atualizações gratuitas.">
+    <title>Elite em 30 Dias - Protocolo de Transformação</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: { 
+                            light: '#F9E89C',
+                            main: '#D4AF37',
+                            dark: '#AA771C',
+                            deep: '#7A5510',
+                            metallic: '#C5A028'
+                        },
+                        dark: { 900: '#050505', 800: '#0f0f0f', 700: '#1a1a1a' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 4s linear infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'scale-in': 'scaleIn 0.6s ease-out forwards',
+                        'glow': 'glow 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+                        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+                        fadeInUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        scaleIn: { '0%': { opacity: '0', transform: 'scale(0.9)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+                        glow: { '0%, 100%': { boxShadow: '0 0 20px rgba(212,175,55,0.3)' }, '50%': { boxShadow: '0 0 40px rgba(212,175,55,0.6)' } },
+                    }
+                }            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; font-family: 'Inter', sans-serif; }
+        
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #AA771C 0%, #D4AF37 25%, #F9E89C 50%, #D4AF37 75%, #AA771C 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #7A5510 0%, #AA771C 20%, #D4AF37 40%, #F9E89C 50%, #D4AF37 60%, #AA771C 80%, #7A5510 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 5s ease infinite;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+        }
+
+        .gold-gradient-bg:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.55);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(212, 175, 55, 0.25);
+            border-color: #D4AF37;
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        .hero-bg {
+            background: radial-gradient(ellipse at center, rgba(212,175,55,0.08) 0%, transparent 70%);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-right { opacity: 0; transform: translateX(50px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.9); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-scale.active { opacity: 1; transform: scale(1); }
+        
+        .delay-100 { transition-delay: 0.1s; } .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; } .delay-400 { transition-delay: 0.4s; }
+        
+        .btn-glow { position: relative; overflow: hidden; }
+        .btn-glow::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s; pointer-events: none;
+        }
+        .btn-glow:hover::before { left: 100%; }
+        
+        .metallic-border {
+            position: relative;
+            border-radius: 1rem;
+            background: #0f0f0f;
+            z-index: 0;
+        }
+        .metallic-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            padding: 1px;
+            background: linear-gradient(135deg, #7A5510, #D4AF37, #F9E89C, #D4AF37, #7A5510);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #7A5510, #D4AF37, #F9E89C);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+        }
+
+        .lock-pulse { animation: glow 2s ease-in-out infinite; }
+        .nav-scrolled { background: rgba(5, 5, 5, 0.98); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); }
+        
+        .bonus-badge {
+            background: linear-gradient(135deg, #D4AF37, #F9E89C);
+            color: #000;
+        }    </style>
+</head>
+<body class="antialiased"><!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 bg-dark-900/90 backdrop-blur-md border-b border-gold-dark/30 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-xl font-black tracking-wider uppercase gold-gradient-text">ELITE <span class="text-white">30</span></span>
+                </div>
+                <div>
+                    <a href="https://eliteem30dias-cyber.github.io/ELITE-EM-30D-PRODUTO/" target="_blank" class="hidden md:block metallic-border text-gold-main hover:bg-gold-main hover:text-black px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 btn-glow">
+                        Liberar Acesso
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="hero-bg"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-left">
+                    <div class="inline-block px-4 py-2 mb-6 rounded-full bg-gold-deep/30 border border-gold-main/40 reveal animate-fade-in-up">
+                        <span class="text-gold-light text-sm font-bold tracking-wide uppercase">
+                            <i class="fas fa-gamepad mr-2"></i> Protocolo Gamificado PWA
+                        </span>
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-black leading-tight mb-6 reveal animate-fade-in-up delay-100">
+                        Transforme sua mente e crie disciplina em <span class="gold-gradient-text">30 Dias</span>
+                    </h1>
+                    <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto lg:mx-0 reveal animate-fade-in-up delay-200">
+                        Mesmo que hoje você esteja perdido e sem foco. Um sistema gamificado com <strong class="text-gold-light">5 missões diárias</strong> que vai te tirar da procrastinação e te colocar no caminho da evolução real.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start reveal animate-fade-in-up delay-300">
+                        <a href="https://eliteem30dias-cyber.github.io/ELITE-EM-30D-PRODUTO/" target="_blank" class="gold-gradient-bg text-black font-bold py-4 px-8 rounded-full text-lg shadow-lg shadow-gold-main/30 hover:shadow-gold-main/50 transform hover:scale-105 transition-all duration-300 text-center btn-glow">
+                            <i class="fas fa-unlock mr-2"></i> LIBERAR SISTEMA AGORA
+                        </a>
+                        <a href="#pain-points" class="px-8 py-4 rounded-full metallic-border text-gray-300 hover:text-gold-light font-medium transition-all duration-300 text-center hover:bg-gold-deep/20">
+                            Ver o Problema
+                        </a>
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-6 reveal animate-fade-in-up delay-400">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-mobile-alt text-gold-main"></i>
+                            <span class="text-sm text-gray-400">PWA Nativo</span>
+                        </div>
+                        <div class="flex items-center gap-2">                            <i class="fas fa-trophy text-gold-main"></i>
+                            <span class="text-sm text-gray-400">Gamificado</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-gift text-gold-main"></i>
+                            <span class="text-sm text-gray-400">Bônus Exclusivos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative lg:h-auto animate-float reveal-right">
+                    <div class="absolute inset-0 bg-gold-main blur-[100px] opacity-20 rounded-full animate-pulse-slow"></div>
+                    <div class="relative z-10 w-full max-w-md mx-auto">
+                        <div class="relative metallic-border rounded-3xl lock-pulse overflow-hidden">
+                            <div class="relative rounded-3xl overflow-hidden">
+                                <div class="absolute inset-0 bg-dark-900 rounded-3xl border border-gold-main/30 overflow-hidden">
+                                    <div class="h-14 bg-dark-800/50 flex items-center justify-center border-b border-gold-main/20">
+                                        <span class="text-gold-light font-bold text-lg">ELITE 30</span>
+                                    </div>
+                                    
+                                    <div class="absolute inset-14 bg-dark-900 overflow-hidden">
+                                        <div class="p-6 bg-dark-800 rounded-xl border border-gold-main/20 mb-4">
+                                            <div class="text-center mb-4">
+                                                <span class="text-gold-light text-sm font-bold">PROGRESSO TOTAL</span>
+                                            </div>
+                                            <div class="w-64 h-64 mx-auto rounded-full bg-dark-800 border-2 border-gold-main/30 flex items-center justify-center">
+                                                <span class="text-6xl font-bold gold-gradient-text">0%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="bg-dark-800 rounded-xl border border-gold-main/20 p-4">
+                                                <div class="w-24 h-24 mx-auto rounded-full bg-dark-800 border-2 border-gold-main/30 flex items-center justify-center mb-3">
+                                                    <span class="text-gold-light text-2xl">0%</span>
+                                                </div>
+                                                <p class="text-center text-gold-light text-sm">MENTALIDADE</p>
+                                            </div>
+                                            <div class="bg-dark-800 rounded-xl border border-gold-main/20 p-4">
+                                                <div class="w-24 h-24 mx-auto rounded-full bg-dark-800 border-2 border-gold-main/30 flex items-center justify-center mb-3">
+                                                    <span class="text-gold-light text-2xl">0%</span>
+                                                </div>
+                                                <p class="text-center text-gold-light text-sm">FÍSICO</p>
+                                            </div>
+                                            <div class="bg-dark-800 rounded-xl border border-gold-main/20 p-4">
+                                                <div class="w-24 h-24 mx-auto rounded-full bg-dark-800 border-2 border-gold-main/30 flex items-center justify-center mb-3">
+                                                    <span class="text-gold-light text-2xl">0%</span>
+                                                </div>
+                                                <p class="text-center text-gold-light text-sm">FINANÇAS</p>
+                                            </div>
+                                            <div class="bg-dark-800 rounded-xl border border-gold-main/20 p-4">                                                <div class="w-24 h-24 mx-auto rounded-full bg-dark-800 border-2 border-gold-main/30 flex items-center justify-center mb-3">
+                                                    <span class="text-gold-light text-2xl">0%</span>
+                                                </div>
+                                                <p class="text-center text-gold-light text-sm">ROTINA</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="h-16 bg-dark-800/50 flex items-center justify-center border-t border-gold-main/20">
+                                        <div class="flex gap-8">
+                                            <i class="fas fa-home text-gold-main text-2xl"></i>
+                                            <i class="fas fa-brain text-gray-500 text-2xl"></i>
+                                            <i class="fas fa-dumbbell text-gray-500 text-2xl"></i>
+                                            <i class="fas fa-credit-card text-gray-500 text-2xl"></i>
+                                            <i class="fas fa-clock text-gray-500 text-2xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-gold-main/10 to-transparent pointer-events-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- Pain Points / Agitation -->
+    <section id="pain-points" class="py-20 bg-dark-900 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gold-deep/20 rounded-full blur-3xl animate-pulse-slow pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl lg:text-4xl font-bold mb-4">Seja <span class="text-red-500">sincero</span>...</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Você se identifica com isso?</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 text-left">
+                <div class="flex items-start gap-4 p-6 rounded-xl bg-dark-800 border border-white/5 card-hover reveal delay-100">
+                    <i class="fas fa-times-circle text-red-500 mt-1 text-xl flex-shrink-0"></i>
+                    <div>
+                        <h4 class="font-bold text-white text-lg">Começa e não termina?</h4>
+                        <p class="text-gray-400 text-sm mt-2">Você tem mil ideias, mas nenhuma chega ao fim.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-6 rounded-xl bg-dark-800 border border-white/5 card-hover reveal delay-200">
+                    <i class="fas fa-times-circle text-red-500 mt-1 text-xl flex-shrink-0"></i>
+                    <div>
+                        <h4 class="font-bold text-white text-lg">Vive sem motivação?</h4>
+                        <p class="text-gray-400 text-sm mt-2">Depende de "vontade" para fazer as coisas, e a vontade nunca vem.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-6 rounded-xl bg-dark-800 border border-white/5 card-hover reveal delay-300">
+                    <i class="fas fa-times-circle text-red-500 mt-1 text-xl flex-shrink-0"></i>
+                    <div>
+                        <h4 class="font-bold text-white text-lg">Sente que está parado?</h4>
+                        <p class="text-gray-400 text-sm mt-2">Os dias passam iguais e você não vê evolução na sua vida.</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center p-6 rounded-xl bg-gold-deep/20 border border-gold-main/40 reveal delay-400">
+                    <div class="text-center">
+                        <p class="text-gold-light font-bold text-lg mb-2">👉 A verdade é dura:</p>
+                        <p class="text-white font-medium">Não falta vontade... <span class="gold-gradient-text">falta um sistema que funcione.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- Solution & Gamification -->
+    <section id="solution" class="py-20 bg-dark-800 border-t border-gold-dark/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-3xl lg:text-4xl font-bold mb-6">O <span class="gold-gradient-text">Protocolo Elite</span> é diferente</h2>
+                    <p class="text-gray-400 text-lg mb-8">
+                        Não é só um app. É um sistema gamificado que transforma sua evolução em um jogo viciante de crescimento pessoal.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gold-deep/30 flex items-center justify-center text-gold-light border border-gold-main/30 flex-shrink-0">
+                                <i class="fas fa-tasks text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">5 Missões Diárias</h3>
+                                <p class="text-gray-400 text-sm">Desbloqueie e complete 5 missões todos os dias. Foco total, sem enrolação.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gold-deep/30 flex items-center justify-center text-gold-light border border-gold-main/30 flex-shrink-0">
+                                <i class="fas fa-chart-line text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">Barra de Progresso</h3>
+                                <p class="text-gray-400 text-sm">Veja sua evolução em tempo real. Cada missão conta.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gold-deep/30 flex items-center justify-center text-gold-light border border-gold-main/30 flex-shrink-0">
+                                <i class="fas fa-level-up-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">Evolução de Categoria</h3>
+                                <p class="text-gray-400 text-sm">Suba de nível conforme avança no protocolo.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gold-deep/30 flex items-center justify-center text-gold-light border border-gold-main/30 flex-shrink-0">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">Timer de Foco</h3>
+                                <p class="text-gray-400 text-sm">Controle seu tempo e mantenha o foco nas missões.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-dark-900 p-6 rounded-3xl metallic-border relative reveal-scale delay-200">
+                    <div class="absolute -top-4 -right-4 gold-gradient-bg text-black font-bold px-4 py-2 rounded-lg rotate-3 shadow-lg text-xs">
+                        GAMIFICAÇÃO
+                    </div>
+                    
+                    <div class="bg-dark-800 rounded-2xl p-4 mb-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-gold-light font-bold text-sm">Protocolo Elite</span>
+                            <span class="text-[10px] bg-gold-deep/30 text-gold-light px-2 py-1 rounded">30 Dias</span>
+                        </div>
+                        <div class="w-full bg-dark-900 rounded-full h-3 mb-2 overflow-hidden">
+                            <div class="progress-bar h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 text-center">Progresso Total: 0%</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 p-3 bg-dark-800 rounded-xl border border-gold-dark/20">
+                            <i class="fas fa-lock text-red-500 flex-shrink-0"></i>
+                            <span class="text-gray-400 text-sm">Missões Bloqueadas</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-dark-800 rounded-xl border border-gold-dark/20">
+                            <i class="fas fa-medal text-gold-main flex-shrink-0"></i>
+                            <span class="text-white text-sm">Evolução de Categoria</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-dark-800 rounded-xl border border-gold-dark/20">
+                            <i class="fas fa-stopwatch text-gold-main flex-shrink-0"></i>
+                            <span class="text-white text-sm">Timer: 11:38:36</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-gold-dark/30 text-center">
+                        <p class="text-gold-light font-bold mb-2 text-sm">🔒 Sistema Bloqueado</p>
+                        <p class="text-[10px] text-gray-400">Libere o acesso para começar sua jornada</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- Results & Authority -->
+    <section class="py-20 bg-dark-900 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-12 reveal">O que acontece em <span class="gold-gradient-text">30 dias</span>?</h2>
+            
+            <div class="grid md:grid-cols-4 gap-6 mb-20">
+                <div class="p-6 bg-dark-800 rounded-xl border border-white/5 reveal delay-100 card-hover">
+                    <i class="fas fa-brain text-3xl text-gold-main mb-4"></i>
+                    <h3 class="font-bold text-white mb-2 text-sm">Disciplina Blindada</h3>
+                    <p class="text-[11px] text-gray-400">Execute mesmo sem vontade. A missão te chama.</p>
+                </div>
+                <div class="p-6 bg-dark-800 rounded-xl border border-white/5 reveal delay-200 card-hover">
+                    <i class="fas fa-bullseye text-3xl text-gold-main mb-4"></i>
+                    <h3 class="font-bold text-white mb-2 text-sm">Foco Laser</h3>
+                    <p class="text-[11px] text-gray-400">Sem distrações. Missão clara todo dia.</p>
+                </div>
+                <div class="p-6 bg-dark-800 rounded-xl border border-white/5 reveal delay-300 card-hover">
+                    <i class="fas fa-rocket text-3xl text-gold-main mb-4"></i>
+                    <h3 class="font-bold text-white mb-2 text-sm">Sem Procrastinação</h3>
+                    <p class="text-[11px] text-gray-400">O sistema não deixa você parar.</p>
+                </div>
+                <div class="p-6 bg-dark-800 rounded-xl border border-white/5 reveal delay-400 card-hover">
+                    <i class="fas fa-trophy text-3xl text-gold-main mb-4"></i>
+                    <h3 class="font-bold text-white mb-2 text-sm">Evolução Real</h3>
+                    <p class="text-[11px] text-gray-400">Veja seu progresso subir dia após dia.</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-gold-deep/20 to-dark-900 metallic-border rounded-2xl p-8 reveal-scale">
+                <h3 class="text-xl font-bold text-white mb-4">Para quem é o Protocolo Elite?</h3>
+                <div class="grid md:grid-cols-3 gap-4 text-left">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-user-slash text-gold-main mt-1 flex-shrink-0"></i>
+                        <p class="text-sm text-gray-300">Cansado de tentar e falhar sozinho.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-gamepad text-gold-main mt-1 flex-shrink-0"></i>
+                        <p class="text-sm text-gray-300">Quer um sistema prático e gamificado.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-compass text-gold-main mt-1 flex-shrink-0"></i>
+                        <p class="text-sm text-gray-300">Precisa de direção clara e imediata.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎁 BÔNUS EXCLUSIVOS -->
+    <section class="py-20 bg-dark-800 border-t border-gold-dark/20 relative overflow-hidden">        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-2 gold-gradient-bg shadow-[0_0_30px_rgba(212,175,55,0.6)]"></div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <div class="inline-block px-4 py-1 mb-4 rounded-full bg-gold-deep/30 border border-gold-main/40">
+                    <span class="text-gold-light text-sm font-bold">🎁 BÔNUS POR TEMPO LIMITADO</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-bold mb-4">Leve <span class="gold-gradient-text">3 Bônus Exclusivos</span> Grátis</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Ao garantir seu acesso hoje, você recebe estes presentes especiais para acelerar ainda mais sua transformação.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Bônus 1 -->
+                <div class="bg-dark-900 rounded-2xl border border-gold-main/30 overflow-hidden card-hover reveal delay-100 group">
+                    <div class="h-2 gold-gradient-bg"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 rounded-full bg-gold-deep/30 border border-gold-main/40 flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                            <i class="fas fa-book-open text-2xl text-gold-light"></i>
+                        </div>
+                        <div class="text-center mb-4">
+                            <span class="text-xs font-bold text-gold-main uppercase tracking-wider">Bônus #1</span>
+                            <h3 class="text-xl font-bold text-white mt-2">E-book Mensal de Desenvolvimento Pessoal</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm text-center mb-6">
+                            Todo mês você recebe um novo e-book exclusivo com técnicas avançadas de mentalidade, produtividade e hábitos de alta performance.
+                        </p>
+                        <div class="text-center">
+                            <span class="text-gray-500 line-through text-sm">Valor: R$ 47/mês</span>
+                            <p class="text-gold-light font-bold">GRÁTIS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bônus 2 - CORRIGIDO -->
+                <div class="bg-dark-900 rounded-2xl border border-gold-main/30 card-hover reveal delay-200 group relative">
+                    <!-- ✅ Selo agora visível (fora do overflow-hidden) -->
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bonus-badge px-4 py-1 rounded-full text-xs font-bold shadow-lg z-10 whitespace-nowrap">
+                        MAIS POPULAR
+                    </div>
+                    
+                    <!-- ✅ Wrapper interno para manter bordas arredondadas na barra -->
+                    <div class="overflow-hidden rounded-2xl">
+                        <div class="h-2 gold-gradient-bg"></div>
+                        <div class="p-8">
+                            <div class="w-16 h-16 rounded-full bg-gold-deep/30 border border-gold-main/40 flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                                <i class="fab fa-whatsapp text-2xl text-gold-light"></i>
+                            </div>
+                            <div class="text-center mb-4">
+                                <span class="text-xs font-bold text-gold-main uppercase tracking-wider">Bônus #2</span>
+                                <h3 class="text-xl font-bold text-white mt-2">Grupo VIP no WhatsApp</h3>                            </div>
+                            <p class="text-gray-400 text-sm text-center mb-6">
+                                Entre para nossa comunidade exclusiva de membros Elite. Networking, suporte direto e motivação diária com pessoas que estão no mesmo caminho que você.
+                            </p>
+                            <div class="text-center">
+                                <span class="text-gray-500 line-through text-sm">Valor: R$ 97</span>
+                                <p class="text-gold-light font-bold">GRÁTIS</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bônus 3 -->
+                <div class="bg-dark-900 rounded-2xl border border-gold-main/30 overflow-hidden card-hover reveal delay-300 group">
+                    <div class="h-2 gold-gradient-bg"></div>
+                    <div class="p-8">
+                        <div class="w-16 h-16 rounded-full bg-gold-deep/30 border border-gold-main/40 flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                            <i class="fas fa-sync-alt text-2xl text-gold-light"></i>
+                        </div>
+                        <div class="text-center mb-4">
+                            <span class="text-xs font-bold text-gold-main uppercase tracking-wider">Bônus #3</span>
+                            <h3 class="text-xl font-bold text-white mt-2">Atualizações Mensais do PWA</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm text-center mb-6">
+                            Receba gratuitamente todas as novas funcionalidades, melhorias e conteúdos que lançarmos no app. Seu sistema evolui junto com você, sem custo adicional.
+                        </p>
+                        <div class="text-center">
+                            <span class="text-gray-500 line-through text-sm">Valor: R$ 29/mês</span>
+                            <p class="text-gold-light font-bold">GRÁTIS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center reveal">
+                <p class="text-gray-400 text-sm">
+                    <i class="fas fa-clock text-gold-main mr-2"></i>
+                    Estes bônus estão disponíveis apenas para os primeiros compradores. Garanta agora!
+                </p>
+            </div>
+        </div>
+    </section><!-- Pricing / Offer Section -->
+    <section id="offer" class="py-24 bg-gradient-to-b from-dark-800 to-dark-900 relative">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-dark-900 rounded-3xl metallic-border overflow-hidden shadow-2xl relative reveal-scale">
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-2 gold-gradient-bg shadow-[0_0_30px_rgba(212,175,55,0.6)] animate-pulse"></div>
+                
+                <div class="p-8 md:p-12 text-center">
+                    <div class="inline-block px-4 py-1 mb-4 rounded-full bg-red-900/30 border border-red-500/40 animate-bounce-slow">
+                        <span class="text-red-400 text-sm font-bold">🔥 OFERTA COM BÔNUS INCLUSOS</span>
+                    </div>
+                    
+                    <h2 class="text-3xl font-bold mb-2">Libere o Protocolo Elite Agora</h2>
+                    <p class="text-gray-400 mb-8">Acesso completo + Todos os Bônus Exclusivos</p>
+                    
+                    <div class="flex justify-center items-baseline gap-2 mb-2 flex-wrap">
+                        <span class="text-gray-500 line-through text-xl">De R$ 97,00</span>
+                        <span class="text-6xl font-black gold-gradient-text">R$ 27,00</span>
+                    </div>
+                    <p class="text-gold-light font-bold mb-8 text-sm uppercase tracking-wider">Pagamento único • Acesso Vitalício</p>
+                    
+                    <ul class="text-left max-w-sm mx-auto space-y-4 mb-10 text-gray-300">
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-dark-800 border border-gold-dark/20">
+                            <i class="fas fa-check-circle text-gold-main flex-shrink-0"></i>
+                            <span>Acesso ao PWA Protocolo Elite</span>
+                        </li>
+                        
+                        <!-- ✅ CORRIGIDO: 5 Missões Diárias -->
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-dark-800 border border-gold-dark/20">
+                            <i class="fas fa-check-circle text-gold-main flex-shrink-0"></i>
+                            <span>5 Missões Diárias Gamificadas</span>
+                        </li>
+                        
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-dark-800 border border-gold-dark/20">
+                            <i class="fas fa-check-circle text-gold-main flex-shrink-0"></i>
+                            <span>Sistema de Evolução de Categoria</span>
+                        </li>
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-dark-800 border border-gold-dark/20">
+                            <i class="fas fa-check-circle text-gold-main flex-shrink-0"></i>
+                            <span>Barra de Progresso e Timer</span>
+                        </li>
+                        
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-gold-deep/10 border border-gold-main/30">
+                            <i class="fas fa-gift text-gold-main flex-shrink-0"></i>
+                            <span class="text-gold-light font-medium">📘 E-book Mensal de Desenvolvimento</span>
+                        </li>
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-gold-deep/10 border border-gold-main/30">
+                            <i class="fas fa-gift text-gold-main flex-shrink-0"></i>
+                            <span class="text-gold-light font-medium">💬 Grupo VIP no WhatsApp</span>
+                        </li>
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-gold-deep/10 border border-gold-main/30">                            <i class="fas fa-gift text-gold-main flex-shrink-0"></i>
+                            <span class="text-gold-light font-medium">🔄 Atualizações Mensais Gratuitas</span>
+                        </li>
+                        
+                        <li class="flex items-center gap-3 card-hover px-4 py-3 rounded-lg bg-dark-800 border border-gold-dark/20">
+                            <i class="fas fa-shield-alt text-gold-main flex-shrink-0"></i>
+                            <span>Garantia de 7 Dias</span>
+                        </li>
+                    </ul>
+
+                    <a href="https://eliteem30dias-cyber.github.io/ELITE-EM-30D-PRODUTO/" target="_blank" class="gold-gradient-bg text-black font-black text-xl py-5 px-10 rounded-full w-full block shadow-lg shadow-gold-main/40 hover:shadow-gold-main/60 transform hover:scale-105 transition-all duration-300 btn-glow">
+                        <i class="fas fa-unlock mr-2"></i> LIBERAR ACESSO + BÔNUS
+                    </a>
+                    
+                    <div class="mt-6 flex flex-wrap justify-center items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1"><i class="fas fa-shield-alt text-gold-dark"></i> Compra Segura</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-mobile-alt text-gold-dark"></i> Funciona no Celular</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-bolt text-gold-dark"></i> Acesso Imediato</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gold-dark/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left reveal">
+                <span class="text-xl font-black tracking-wider uppercase gold-gradient-text">ELITE <span class="text-white">30</span></span>
+                <p class="text-gray-500 text-sm mt-2">© 2026 Elite em 30 Dias. Todos os direitos reservados.</p>
+            </div>
+            <div class="flex gap-6 text-gray-400 reveal delay-100">
+                <a href="#" class="hover:text-gold-main transition-all duration-300 transform hover:scale-125"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-gold-main transition-all duration-300 transform hover:scale-125"><i class="fab fa-whatsapp text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function reveal() {
+            const elements = document.querySelectorAll('.reveal, .reveal-right, .reveal-scale');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        function handleScroll() {
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                navbar.classList.toggle('nav-scrolled', window.scrollY > 50);
+            }
+            reveal();
+        }
+
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSmoothScroll();
+            reveal();
+        });
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', reveal);
+    </script>
+</body>
+</html>
